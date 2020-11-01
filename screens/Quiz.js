@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView, StatusBar } from "react-native";
-import Questions from "../data/computers";
+import Questions from "../data/westerns";
 import Button from "../components/Button";
 
 const Quiz = () => {
-  let que = Questions[0]["question"];
-  let answers = Questions[0]["answers"];
+  const [totalQue, setTotalQue] = useState(Questions.length);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [queIndex, setQueIndex] = useState(0);
+
+  let que = Questions[queIndex]["question"];
+  let answers = Questions[queIndex]["answers"];
+
+  const checkAnswer = (correct) => {
+    if (correct) {
+      setCorrectCount(
+        queIndex == 0
+          ? 1
+          : correctCount + 1 > totalQue
+          ? correctCount
+          : correctCount + 1
+      );
+    }
+    if (queIndex + 1 >= totalQue) {
+      setQueIndex(0);
+    } else setQueIndex(queIndex + 1);
+  };
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.statusbar}>
@@ -17,12 +36,12 @@ const Quiz = () => {
               <Button
                 key={answer.id}
                 text={answer.text}
-                onPress={() => alert("hi")}
+                onPress={() => checkAnswer(answer.correct)}
               />
             ))}
           </View>
         </View>
-        <Text style={styles.text}>0/3</Text>
+        <Text style={styles.text}>{`${correctCount}/${totalQue}`}</Text>
       </SafeAreaView>
     </View>
   );
@@ -56,20 +75,10 @@ const styles = StyleSheet.create({
 });
 
 /**
- * render button with button component
- * bg #36b1f0
- * barstyle light-content
- * import question
- * text stye:
- * color white
- * fontsize 25
- * center
- * spacing 0.02
- * fontwt 600
+ * TODO: set state
+ * correct count,
+ * total count
  *
- * safeareastyle:
- * flex 1
- * margintop 100
- * justify space between
+ *
  *
  */
