@@ -2,4 +2,4 @@
 
 # Screenshots:
 
-![]("../assets/quiz.gifassets/quiz.gif")
+[!]("../assets/quiz.gif")
