@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView, StatusBar } from "react-native";
-import Questions from "../data/westerns";
+import Questions from "../data/computers";
 import Button from "../components/Button";
 
 const Quiz = () => {
@@ -12,6 +12,7 @@ const Quiz = () => {
   let answers = Questions[queIndex]["answers"];
 
   const checkAnswer = (correct) => {
+    if (queIndex === 0) setCorrectCount(0);
     if (correct) {
       setCorrectCount(
         queIndex == 0
