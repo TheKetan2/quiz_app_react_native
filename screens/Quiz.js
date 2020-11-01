@@ -8,7 +8,7 @@ import {
   StatusBar,
   Dimensions,
 } from "react-native";
-import Questions from "../data/space";
+import Questions from "../data/westerns";
 import Button from "../components/Button";
 
 const screen = Dimensions.get("window");
