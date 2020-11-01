@@ -1,30 +1,60 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, SafeAreaView, StatusBar } from "react-native";
-import Questions from "../data/computers";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  StatusBar,
+  Dimensions,
+} from "react-native";
+import Questions from "../data/space";
 import Button from "../components/Button";
+
+const screen = Dimensions.get("window");
 
 const Quiz = () => {
   const [totalQue, setTotalQue] = useState(Questions.length);
   const [correctCount, setCorrectCount] = useState(0);
   const [queIndex, setQueIndex] = useState(0);
+  const [show, setShow] = useState();
+  const [right, setRight] = useState(false);
 
   let que = Questions[queIndex]["question"];
   let answers = Questions[queIndex]["answers"];
 
   const checkAnswer = (correct) => {
     if (queIndex === 0) setCorrectCount(0);
+    setShow(true);
     if (correct) {
-      setCorrectCount(
-        queIndex == 0
-          ? 1
-          : correctCount + 1 > totalQue
-          ? correctCount
-          : correctCount + 1
-      );
+      setRight(true);
+      setTimeout(() => {
+        setCorrectCount(
+          queIndex == 0
+            ? 1
+            : correctCount + 1 > totalQue
+            ? correctCount
+            : correctCount + 1
+        );
+        setShow(false);
+        setRight(false);
+      }, 1000);
+    } else {
+      setRight(false);
     }
+
     if (queIndex + 1 >= totalQue) {
-      setQueIndex(0);
-    } else setQueIndex(queIndex + 1);
+      setTimeout(() => {
+        setQueIndex(0);
+        setShow(false);
+        setRight(false);
+      }, 1000);
+    } else
+      setTimeout(() => {
+        setQueIndex(queIndex + 1);
+        setShow(false);
+        setRight(false);
+      }, 1000);
   };
   return (
     <View style={styles.container}>
@@ -44,6 +74,24 @@ const Quiz = () => {
         </View>
         <Text style={styles.text}>{`${correctCount}/${totalQue}`}</Text>
       </SafeAreaView>
+      {show ? (
+        <View
+          style={[
+            styles.imageContainer,
+            { backgroundColor: right ? "green" : "red" },
+          ]}
+        >
+          <Image
+            style={styles.image}
+            source={
+              right
+                ? require("../assets/check.png")
+                : require("../assets/close.png")
+            }
+            resizeMode="contain"
+          />
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -60,6 +108,23 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#36b1f0",
     flex: 1,
+  },
+  image: {
+    width: 70,
+    alignSelf: "center",
+  },
+  imageContainer: {
+    width: 200,
+    height: 200,
+    position: "absolute",
+    justifyContent: "center",
+    borderRadius: 100,
+    top: screen.height / 3 + 20,
+    left: screen.width / 3 - 10,
+    borderWidth: 5,
+    borderColor: "#fff",
+    shadowColor: "grey",
+    // shadowOffset: "20",
   },
   statusbar: {
     marginTop: 100,
