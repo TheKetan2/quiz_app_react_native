@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   StyleSheet,
@@ -13,15 +13,23 @@ import Button from "../components/Button";
 
 const screen = Dimensions.get("window");
 
-const Quiz = () => {
-  const [totalQue, setTotalQue] = useState(Questions.length);
+const Quiz = ({ navigation, route }) => {
+  const [questions, setQuestions] = useState(route.params.questions);
+  const [totalQue, setTotalQue] = useState(questions.length);
   const [correctCount, setCorrectCount] = useState(0);
   const [queIndex, setQueIndex] = useState(0);
   const [show, setShow] = useState();
   const [right, setRight] = useState(false);
 
-  let que = Questions[queIndex]["question"];
-  let answers = Questions[queIndex]["answers"];
+  useEffect(() => {
+    console.log();
+
+    // setTotalQue(questions.length);
+    console.log(questions);
+  }, []);
+
+  let que = questions ? questions[queIndex]["question"] : null;
+  let answers = questions ? questions[queIndex]["answers"] : null;
 
   const checkAnswer = (correct) => {
     if (queIndex === 0) setCorrectCount(0);
@@ -56,7 +64,7 @@ const Quiz = () => {
         setRight(false);
       }, 1000);
   };
-  return (
+  return que ? (
     <View style={styles.container}>
       <SafeAreaView style={styles.statusbar}>
         <View>
@@ -93,7 +101,7 @@ const Quiz = () => {
         </View>
       ) : null}
     </View>
-  );
+  ) : null;
 };
 
 export default Quiz;
